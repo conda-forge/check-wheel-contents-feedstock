@@ -1,4 +1,4 @@
-{% set version = "0.4.0" %}
+{% set version = "0.5.0" %}
 
 package:
   name: check-wheel-contents
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/c/check-wheel-contents/check-wheel-contents-{{ version }}.tar.gz
-  sha256: ace25841b660987aea576940e8940b412fec149d100bca2cdf3fae3c9b0a88eb
+  sha256: e4a8c1c3ab452ae3d3f4293c3e3a20468461a2ba6fc8f99280b39c146e6f4e3e
 
 build:
   noarch: python

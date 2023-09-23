@@ -24,7 +24,7 @@ requirements:
     - attrs >=18.1
     - click >=7.0
     - packaging
-    - pydantic >=1.7,<2.dev0
+    - pydantic >=2.0,<3.0
     - python >=3.8
     - tomli >=1.2,<3.0
     - wheel-filename >=1.1,<2.dev0

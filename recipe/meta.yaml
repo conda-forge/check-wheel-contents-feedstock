@@ -1,12 +1,14 @@
-{% set version = "0.6.0" %}
+{% set version = "0.6.1" %}
+
+{% set python_min = python_min | default("3.9") %}
 
 package:
   name: check-wheel-contents
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/c/check-wheel-contents/check-wheel-contents-{{ version }}.tar.gz
-  sha256: 64419c4e150e1de6f2d0bce7d4c7668eebfac127f0274014dd1a56ba07525364
+  url: https://pypi.org/packages/source/c/check-wheel-contents/check_wheel_contents-{{ version }}.tar.gz
+  sha256: d1261166c24a7a0f202016e38f2601452580674e9bb35667530c2b1a1c36f690
 
 build:
   noarch: python
@@ -17,34 +19,35 @@ build:
 
 requirements:
   host:
+    - hatchling
     - pip
-    - python >=3.8
-    - setuptools >=46.4.0
+    - python {{ python_min }}
   run:
     - attrs >=18.1
     - click >=7.0
     - packaging
     - pydantic >=2.0,<3.0
-    - python >=3.8
+    - python >={{ python_min }}
     - tomli >=1.2,<3.0
     - wheel-filename >=1.1,<2.dev0
 
 test:
   source_files:
     - test
+  requires:
+    - m2-grep  # [win]
+    - pip
+    - pytest-cov
+    - pytest-mock
+    - python {{ python_min }}
   imports:
     - check_wheel_contents
   commands:
     - pip check
     - check-wheel-contents --version
     - check-wheel-contents --help
-    - check-wheel-contents --version | grep -iE "{{ version.replace('.', '\.') }}"
+    - check-wheel-contents --version | grep -iE {{ version.replace('.', '\.') }}
     - pytest -vv --color=yes --tb=long --cov=check_wheel_contents --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not from_local_tree" --cov-fail-under=99
-  requires:
-    - m2-grep  # [win]
-    - pip
-    - pytest-cov
-    - pytest-mock
 
 about:
   home: https://github.com/jwodder/check-wheel-contents

@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: 0.6.2
+  version: 0.6.3
 
 package:
   name: check-wheel-contents
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/c/check-wheel-contents/check_wheel_contents-${{ version }}.tar.gz
-  sha256: f4a01d2b5bb62a91781cf4b5c0f472fcb41a0790027a34de05ca69b552717d32
+  sha256: 10e6939e2fe4e6ce1edf2ff6ec6157808677e80782e78021ae139dd88473a442
 
 build:
   number: 0
@@ -28,12 +28,12 @@ requirements:
     - python ${{ python_min }}.*
   run:
     - attrs >=18.1
-    - click >=8.2,<9.0
+    - click >=8.2,<9.0,!=8.2.2
     - packaging
     - pydantic >=2.0,<3.0
     - python >=${{ python_min }}
     - tomli >=1.2,<3.0
-    - wheel-filename >=1.1,<2.dev0
+    - wheel-filename >=1.1,<2.0
 
 tests:
   - python:
@@ -51,13 +51,11 @@ tests:
         - pytest-cov
         - pytest-mock
         - python ${{ python_min }}.*
-        - if: win
-          then: m2-grep
     script:
       - pip check
       - check-wheel-contents --version
       - check-wheel-contents --help
-      - check-wheel-contents --version | grep -iE "${{ version | replace('.', '\\.') }}"
+      - check-wheel-contents --version | python -c "import sys; v = sys.stdin.read().strip(); print(v); assert v.endswith('${{ version }}');"
       - pytest -vv --color=yes --tb=long --cov=check_wheel_contents --cov-report=term-missing:skip-covered --no-cov-on-fail -k "not from_local_tree" --cov-fail-under=99
 
 about:
